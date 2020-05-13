@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="colors.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1><a onclick="fetchPage('web');">WEB</a></h1>
+    <input type="button" value="night" class="toggle" onclick="clickButton()">
+    <div id="grid">
+        <div id="leftDiv">
+            <ol id="nav"></ol>
+        </div>
+        <div id="rightDiv">
+            <p>
+                <article></article>
+            </p>
+        </div>
+    </div>
+    <script>
+        function fetchPage(name) {
+            fetch(name).then(function(response) {
+                response.text().then(function(text) {
+                    document.querySelector('article').innerHTML = text;
+                })
+            })
+        }
+
+        if(location.hash) {
+            fetchPage(location.hash.substr(2));
+        }
+        else {
+            fetchPage('welcome')
+        }
+
+        fetch('list').then(function(response) {
+            response.text().then(function(text) {
+                var lists = text.split(',');
+                var list='';
+                for(var key in lists) {
+                    list += '<li><a href="#!'+lists[key]+'" onclick="fetchPage(\''+lists[key]+'\');">'+lists[key]+'</a></li>';
+                }
+                document.querySelector('#nav').innerHTML = list;
+            })
+        })
+    </script>
+</body>
+</html>
